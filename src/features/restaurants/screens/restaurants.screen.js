@@ -1,49 +1,65 @@
-import React from "react";
+import React, { useContext, useState } from "react";
 import styled from "styled-components/native";
-import { FlatList } from "react-native";
-import { Searchbar } from "react-native-paper";
+import { TouchableOpacity } from "react-native";
+import { ActivityIndicator, MD2Colors } from "react-native-paper";
 import { RestaurantInfoCard } from "../components/restaurant-info-card.component";
 import { SafeArea } from "../../../components/utility/safe-area.component";
+import { FadeInView } from "../../../components/animations/fade.animation";
 import { Spacer } from "../../../components/spacer/spacer.component";
+import { FavoritesBar } from "../../../components/favorites/favorites-bar.component";
+import { RestaurantsContext } from "../../../services/restaurants/restaurants.context";
+import { FavoritesContext } from "../../../services/favorites/favorites.context";
+import { Search } from "../components/search.component";
+import { RestaurantList } from "../components/restaurant-list.styles";
 
-const SearchContainer = styled.View`
-  padding: ${(props) => props.theme.space[3]};
+const Loading = styled(ActivityIndicator)`
+  margin-left: -25px;
 `;
 
-const RestaurantSearchBar = styled(Searchbar)`
-  border-radius: 5px;
+const LoadingContainer = styled.View`
+  position: absolute;
+  top: 50%;
+  left: 50%;
 `;
 
-const RestaurantList = styled(FlatList).attrs({
-  contentContainerStyle: {
-    padding: 16,
-  },
-})``;
+export const RestaurantsScreen = ({ navigation }) => {
+  const { restaurants, isLoading } = useContext(RestaurantsContext);
+  const { favorites } = useContext(FavoritesContext);
+  const [isToggled, SetIsToggled] = useState(false);
 
-export const RestaurantsScreen = () => (
-  <SafeArea>
-    <SearchContainer>
-      <RestaurantSearchBar placeholder="Search" />
-    </SearchContainer>
-    <RestaurantList
-      data={[
-        { name: 1 },
-        { name: 2 },
-        { name: 3 },
-        { name: 4 },
-        { name: 5 },
-        { name: 6 },
-        { name: 7 },
-        { name: 8 },
-        { name: 9 },
-        { name: 10 },
-      ]}
-      renderItem={() => (
-        <Spacer position="bottom" size="large">
-          <RestaurantInfoCard />
-        </Spacer>
+  return (
+    <SafeArea>
+      {isLoading && (
+        <LoadingContainer>
+          <Loading size={50} animating={true} color={MD2Colors.blue800} />
+        </LoadingContainer>
       )}
-      keyExtractor={(item) => item.name}
-    />
-  </SafeArea>
-);
+      <Search
+        isFavoritesToggled={isToggled}
+        onFavoritesToggle={() => SetIsToggled(!isToggled)}
+      />
+      {isToggled && (
+        <FavoritesBar favorites={favorites} onNavigate={navigation.navigate} />
+      )}
+      <RestaurantList
+        data={restaurants}
+        renderItem={({ item }) => {
+          return (
+            <TouchableOpacity
+              onPress={() =>
+                navigation.navigate("RestaurantDetail", { restaurant: item })
+              }
+            >
+              <Spacer position="bottom" size="large">
+                <FadeInView>
+                  <RestaurantInfoCard restaurant={item} />
+                </FadeInView>
+              </Spacer>
+            </TouchableOpacity>
+          );
+        }}
+        keyExtractor={(item) => item.name}
+      />
+    </SafeArea>
+  );
+};
