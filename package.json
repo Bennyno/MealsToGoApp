@@ -12,7 +12,7 @@
   "dependencies": {
     "@expo-google-fonts/lato": "^0.2.3",
     "@expo-google-fonts/oswald": "^0.2.3",
-    "@react-native-async-storage/async-storage": "1.13.2",
+    "@react-native-async-storage/async-storage": "1.17.11",
     "@react-native-community/masked-view": "0.1.10",
     "@react-navigation/bottom-tabs": "^6.5.7",
     "@react-navigation/native": "^6.1.6",
@@ -34,7 +34,8 @@
     "react-native-svg": "13.4.0",
     "react-native-web": "^0.19.4",
     "react-native-webview": "11.26.0",
-    "styled-components": "^5.3.10"
+    "styled-components": "^5.3.10",
+    "expo-camera": "~13.2.1"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
