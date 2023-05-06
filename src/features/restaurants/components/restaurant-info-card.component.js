@@ -1,5 +1,6 @@
 import React from "react";
 import { SvgXml } from "react-native-svg";
+import { View } from "react-native";
 import { Favorite } from "../../../components/favorites/favorite.component";
 import { Spacer } from "../../../components/spacer/spacer.component";
 import { Text } from "../../../components/typography/text.component";
@@ -15,7 +16,6 @@ import {
   Rating,
   Icon,
 } from "./restaurant-info-card.styles";
-import { FavoritesContext } from "../../../services/favorites/favorites.context";
 
 export const RestaurantInfoCard = ({ restaurant = {} }) => {
   const {
@@ -34,9 +34,11 @@ export const RestaurantInfoCard = ({ restaurant = {} }) => {
   const ratingArray = Array.from(new Array(Math.floor(rating)));
 
   return (
-    <RestaurantCard elevation={5}>
-      <Favorite restaurant={restaurant} />
-      <RestaurantCardCover key={name} source={{ uri: photos[0] }} />
+    <RestaurantCard elevation={2}>
+      <View>
+        <Favorite restaurant={restaurant} />
+        <RestaurantCardCover key={name} source={{ uri: photos[0] }} />
+      </View>
       <Info>
         <Text variant="label">{name}</Text>
         <Section>
